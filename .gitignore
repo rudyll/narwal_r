@@ -24,3 +24,4 @@ NarwalIntegration-master/
 # Tool output (may contain device IDs)
 tools/sniff output/
 tools/*.json
+capture_results*.json
