@@ -12,10 +12,12 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
+from homeassistant.exceptions import HomeAssistantError
+
 from . import NarwalConfigEntry
 from .coordinator import NarwalCoordinator
 from .entity import NarwalEntity
-from .narwal_client import NarwalClient, NarwalState
+from .narwal_client import NarwalClient, NarwalCommandError, NarwalState
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -108,9 +110,15 @@ class NarwalSwitch(NarwalEntity, SwitchEntity):
         return self.entity_description.is_on_fn(state)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
-        await self.entity_description.turn_on_fn(self.coordinator.client)
+        try:
+            await self.entity_description.turn_on_fn(self.coordinator.client)
+        except NarwalCommandError as err:
+            raise HomeAssistantError(str(err)) from err
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
-        await self.entity_description.turn_off_fn(self.coordinator.client)
+        try:
+            await self.entity_description.turn_off_fn(self.coordinator.client)
+        except NarwalCommandError as err:
+            raise HomeAssistantError(str(err)) from err
         await self.coordinator.async_request_refresh()

@@ -12,10 +12,12 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
+from homeassistant.exceptions import HomeAssistantError
+
 from . import NarwalConfigEntry
 from .coordinator import NarwalCoordinator
 from .entity import NarwalEntity
-from .narwal_client import NarwalClient, NarwalState, MopHumidity
+from .narwal_client import NarwalClient, NarwalCommandError, NarwalState, MopHumidity
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -113,5 +115,8 @@ class NarwalSelect(NarwalEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Handle option selection."""
-        await self.entity_description.select_fn(self.coordinator.client, option)
+        try:
+            await self.entity_description.select_fn(self.coordinator.client, option)
+        except NarwalCommandError as err:
+            raise HomeAssistantError(str(err)) from err
         await self.coordinator.async_request_refresh()
