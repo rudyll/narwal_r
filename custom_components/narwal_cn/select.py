@@ -1,0 +1,117 @@
+"""Select entities for Narwal vacuum — mop humidity and cleaning mode."""
+
+from __future__ import annotations
+
+import logging
+from dataclasses import dataclass
+from collections.abc import Callable, Coroutine
+from typing import Any
+
+from homeassistant.components.select import SelectEntity, SelectEntityDescription
+from homeassistant.const import EntityCategory
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+
+from . import NarwalConfigEntry
+from .coordinator import NarwalCoordinator
+from .entity import NarwalEntity
+from .narwal_client import NarwalClient, NarwalState, MopHumidity
+
+_LOGGER = logging.getLogger(__name__)
+
+# ── Mop humidity ────────────────────────────────────────────────────────────
+MOP_HUMIDITY_OPTIONS = ["dry", "normal", "wet"]
+_MOP_HUMIDITY_TO_ENUM = {
+    "dry": MopHumidity.DRY,
+    "normal": MopHumidity.NORMAL,
+    "wet": MopHumidity.WET,
+}
+_MOP_HUMIDITY_FROM_ENUM = {v: k for k, v in _MOP_HUMIDITY_TO_ENUM.items()}
+
+# ── Cleaning mode ────────────────────────────────────────────────────────────
+# NOTE: topic and payload values are pending confirmation via sniff_all_topics.py.
+# Run: python3 tools/sniff_all_topics.py --subscribe --out dump.json
+#      then switch modes in the App to capture the topic+payload.
+CLEANING_MODE_OPTIONS = ["sweep", "mop", "sweep_and_mop", "sweep_then_mop"]
+_CLEANING_MODE_VALUES = {
+    "sweep": 1,
+    "mop": 2,
+    "sweep_and_mop": 3,
+    "sweep_then_mop": 4,
+}
+_CLEANING_MODE_FROM_VALUE = {v: k for k, v in _CLEANING_MODE_VALUES.items()}
+
+
+@dataclass(frozen=True, kw_only=True)
+class NarwalSelectDescription(SelectEntityDescription):
+    """Describes a Narwal select entity."""
+
+    options_list: list[str]
+    current_fn: Callable[[NarwalState], str | None]
+    select_fn: Callable[[NarwalClient, str], Coroutine[Any, Any, Any]]
+
+
+SELECT_DESCRIPTIONS: tuple[NarwalSelectDescription, ...] = (
+    NarwalSelectDescription(
+        key="mop_humidity",
+        translation_key="mop_humidity",
+        icon="mdi:water-percent",
+        entity_category=EntityCategory.CONFIG,
+        options_list=MOP_HUMIDITY_OPTIONS,
+        current_fn=lambda state: _MOP_HUMIDITY_FROM_ENUM.get(state.mop_humidity),
+        select_fn=lambda client, opt: client.set_mop_humidity(
+            _MOP_HUMIDITY_TO_ENUM[opt]
+        ),
+    ),
+    NarwalSelectDescription(
+        key="cleaning_mode",
+        translation_key="cleaning_mode",
+        icon="mdi:broom",
+        entity_category=EntityCategory.CONFIG,
+        options_list=CLEANING_MODE_OPTIONS,
+        current_fn=lambda state: _CLEANING_MODE_FROM_VALUE.get(state.cleaning_mode),
+        select_fn=lambda client, opt: client.set_cleaning_mode(
+            _CLEANING_MODE_VALUES[opt]
+        ),
+    ),
+)
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,
+    entry: NarwalConfigEntry,
+    async_add_entities: AddConfigEntryEntitiesCallback,
+) -> None:
+    """Set up Narwal select entities."""
+    coordinator = entry.runtime_data
+    async_add_entities(
+        NarwalSelect(coordinator, description) for description in SELECT_DESCRIPTIONS
+    )
+
+
+class NarwalSelect(NarwalEntity, SelectEntity):
+    """A Narwal select entity."""
+
+    entity_description: NarwalSelectDescription
+
+    def __init__(
+        self, coordinator: NarwalCoordinator, description: NarwalSelectDescription
+    ) -> None:
+        super().__init__(coordinator)
+        self.entity_description = description
+        device_id = coordinator.config_entry.data["device_id"]
+        self._attr_unique_id = f"{device_id}_{description.key}"
+        self._attr_options = description.options_list
+
+    @property
+    def current_option(self) -> str | None:
+        """Return the currently selected option."""
+        state = self.coordinator.data
+        if state is None:
+            return None
+        return self.entity_description.current_fn(state)
+
+    async def async_select_option(self, option: str) -> None:
+        """Handle option selection."""
+        await self.entity_description.select_fn(self.coordinator.client, option)
+        await self.coordinator.async_request_refresh()

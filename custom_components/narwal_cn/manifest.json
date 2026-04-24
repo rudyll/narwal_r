@@ -4,7 +4,7 @@
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/sjmotew/NarwalIntegration",
+  "documentation": "https://github.com/rudyll/narwal_r",
   "integration_type": "device",
   "iot_class": "local_push",
   "requirements": ["bbpb>=1.4.0", "Pillow>=9.0.0"],

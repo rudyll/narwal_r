@@ -3,10 +3,16 @@
     "step": {
       "user": {
         "title": "连接云鲸扫地机器人",
-        "description": "输入机器人的 IP 地址并选择型号。",
+        "description": "输入机器人的 IP 地址，集成将自动检测设备型号。",
         "data": {
           "host": "IP 地址",
-          "port": "端口",
+          "port": "端口"
+        }
+      },
+      "manual": {
+        "title": "手动选择型号",
+        "description": "自动检测失败，请手动选择您的机器人型号。",
+        "data": {
           "model": "型号"
         }
       }
@@ -51,6 +57,56 @@
           "on": "已停靠",
           "off": "未停靠"
         }
+      },
+      "charging": {
+        "name": "充电中"
+      }
+    },
+    "button": {
+      "locate": {
+        "name": "寻找机器人"
+      },
+      "wash_mop": {
+        "name": "清洗拖布"
+      },
+      "dry_mop": {
+        "name": "烘干拖布"
+      },
+      "empty_dustbin": {
+        "name": "清空尘盒"
+      }
+    },
+    "select": {
+      "mop_humidity": {
+        "name": "拖地湿度",
+        "state": {
+          "dry": "干拖",
+          "normal": "标准",
+          "wet": "湿拖"
+        }
+      },
+      "cleaning_mode": {
+        "name": "清洁模式",
+        "state": {
+          "sweep": "仅扫地",
+          "mop": "仅拖地",
+          "sweep_and_mop": "扫拖同步",
+          "sweep_then_mop": "先扫后拖"
+        }
+      }
+    },
+    "switch": {
+      "carpet_detection": {
+        "name": "地毯检测"
+      },
+      "ai_dirt_detection": {
+        "name": "AI 污渍检测"
+      },
+      "ai_defecation_detection": {
+        "name": "AI 排泄物检测"
+      },
+      "child_lock": {
+        "name": "童锁"
       }
     }
   }

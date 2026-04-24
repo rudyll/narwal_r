@@ -525,6 +525,14 @@ class NarwalState:
     # Secondary confirmation signal.
     dock_field47: int = 0
 
+    # Cleaning settings (updated from command responses; pending broadcast topic discovery)
+    mop_humidity: int = 0      # MopHumidity enum value (0=dry, 1=normal, 2=wet)
+    cleaning_mode: int = 0     # 1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop
+    carpet_detection: bool | None = None
+    ai_dirt_detection: bool | None = None
+    ai_defecation_detection: bool | None = None
+    child_lock: bool | None = None
+
     # Raw data for fields we haven't fully decoded yet
     raw_base_status: dict[str, Any] = field(default_factory=dict)
     raw_working_status: dict[str, Any] = field(default_factory=dict)

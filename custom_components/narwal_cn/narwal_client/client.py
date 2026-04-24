@@ -47,6 +47,11 @@ from .const import (
     TOPIC_CMD_SET_LED,
     TOPIC_CMD_WASH_MOP,
     TOPIC_CMD_YELL,
+    TOPIC_CMD_SET_CLEAN_MODE,
+    TOPIC_CMD_SET_CARPET_DETECT,
+    TOPIC_CMD_SET_AI_DIRT_DETECT,
+    TOPIC_CMD_SET_AI_DEFECATION_DETECT,
+    TOPIC_CMD_SET_CHILD_LOCK,
     DEFAULT_TOPIC_PREFIX,
     WAKE_TIMEOUT,
     CommandResult,
@@ -1076,6 +1081,35 @@ class NarwalClient:
     async def empty_dustbin(self) -> CommandResponse:
         """Empty the dustbin at the station."""
         return await self.send_command(TOPIC_CMD_DUST_GATHERING)
+
+    async def set_cleaning_mode(self, mode: int) -> CommandResponse:
+        """Set cleaning mode.
+
+        Values (pending topic confirmation via sniff_all_topics.py):
+          1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop
+        """
+        payload = b"\x08" + bytes([mode & 0x7F])
+        return await self.send_command(TOPIC_CMD_SET_CLEAN_MODE, payload)
+
+    async def set_carpet_detection(self, enabled: bool) -> CommandResponse:
+        """Enable or disable carpet detection/avoidance."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_CARPET_DETECT, payload)
+
+    async def set_ai_dirt_detection(self, enabled: bool) -> CommandResponse:
+        """Enable or disable AI dirt detection."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_AI_DIRT_DETECT, payload)
+
+    async def set_ai_defecation_detection(self, enabled: bool) -> CommandResponse:
+        """Enable or disable AI defecation detection."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_AI_DEFECATION_DETECT, payload)
+
+    async def set_child_lock(self, enabled: bool) -> CommandResponse:
+        """Enable or disable child lock."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_CHILD_LOCK, payload)
 
     # --- Query commands ---
 

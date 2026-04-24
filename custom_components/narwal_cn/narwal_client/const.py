@@ -88,6 +88,14 @@ TOPIC_CMD_SET_FAN_LEVEL = "clean/set_fan_level"
 TOPIC_CMD_SET_MOP_HUMIDITY = "clean/set_mop_humidity"
 TOPIC_CMD_GET_CURRENT_TASK = "clean/current_clean_task/get"
 
+# Pending topic confirmation — run tools/sniff_all_topics.py while
+# toggling each feature in the App to capture the real topic+payload.
+TOPIC_CMD_SET_CLEAN_MODE = "clean/set_clean_mode"          # 1=sweep 2=mop 3=both 4=sweep_then_mop
+TOPIC_CMD_SET_CARPET_DETECT = "clean/set_carpet_detect"    # 0=off 1=on
+TOPIC_CMD_SET_AI_DIRT_DETECT = "clean/set_ai_dirt_detect"  # 0=off 1=on
+TOPIC_CMD_SET_AI_DEFECATION_DETECT = "clean/set_ai_defecation_detect"  # 0=off 1=on
+TOPIC_CMD_SET_CHILD_LOCK = "device/set_child_lock"         # 0=off 1=on
+
 # Map
 TOPIC_CMD_GET_MAP = "map/get_map"
 TOPIC_CMD_GET_ALL_MAPS = "map/get_all_reduced_maps"
