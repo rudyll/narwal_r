@@ -4,8 +4,8 @@ discover_product_key.py — 连接机器人 WebSocket，自动从广播帧提取
 
 用法：
     python3 tools/discover_product_key.py [IP] [PORT]
-    python3 tools/discover_product_key.py 10.10.10.220
-    python3 tools/discover_product_key.py 10.10.10.220 9002
+    python3 tools/discover_product_key.py <robot_ip>
+    python3 tools/discover_product_key.py <robot_ip> 9002
 
 机器人开机后，直接连接 ws://IP:9002，监听广播帧。
 广播 topic 格式：/{product_key}/{device_id}/status/...
@@ -22,7 +22,7 @@ except ImportError:
     print("需要安装 websockets：pip3 install websockets")
     sys.exit(1)
 
-DEFAULT_HOST = "10.10.10.220"
+DEFAULT_HOST = ""
 DEFAULT_PORT = 9002
 
 # 已知 product_key 列表（用于发送唤醒帧）

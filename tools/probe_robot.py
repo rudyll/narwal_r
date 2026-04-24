@@ -4,8 +4,8 @@ probe_robot.py — 验证机器人 WebSocket 连接，获取基础状态。
 
 用法：
     python3 tools/probe_robot.py [IP] [PRODUCT_KEY] [PORT]
-    python3 tools/probe_robot.py 10.10.10.220
-    python3 tools/probe_robot.py 10.10.10.220 QoEsI5qYXO
+    python3 tools/probe_robot.py <robot_ip>
+    python3 tools/probe_robot.py <robot_ip> <product_key>
 
 不提供 PRODUCT_KEY 时使用自动检测模式（较慢，尝试所有已知 key）。
 
@@ -30,7 +30,7 @@ except ImportError as e:
     print("请确认已安装依赖：pip3 install bbpb websockets Pillow")
     sys.exit(1)
 
-DEFAULT_HOST = "10.10.10.220"
+DEFAULT_HOST = ""
 DEFAULT_PORT = 9002
 
 

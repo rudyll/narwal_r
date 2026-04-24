@@ -20,3 +20,7 @@ NarwalIntegration-master/
 
 # HA dev
 *.log
+
+# Tool output (may contain device IDs)
+tools/sniff output/
+tools/*.json

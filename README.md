@@ -100,10 +100,10 @@ pip install websockets bbpb
 
 ```bash
 # 被动监听（推荐，不干扰机器人）
-python3 tools/discover_product_key.py 10.20.20.120
+python3 tools/discover_product_key.py 192.168.1.xxx
 
 # 如果被动监听 10 秒无结果，加 --wake 参数主动唤醒
-python3 tools/discover_product_key.py 10.20.20.120 --wake
+python3 tools/discover_product_key.py 192.168.1.xxx --wake
 ```
 
 输出示例：
@@ -121,9 +121,9 @@ python3 tools/discover_product_key.py 10.20.20.120 --wake
 适用场景：验证机器人是否可以正常连接，查看基础状态。
 
 ```bash
-python3 tools/probe_robot.py 10.20.20.120
+python3 tools/probe_robot.py 192.168.1.xxx
 # 指定已知的 product_key（可选，不指定则自动探测）
-python3 tools/probe_robot.py 10.20.20.120 --product-key BYWBPqSxeC
+python3 tools/probe_robot.py 192.168.1.xxx --product-key BYWBPqSxeC
 ```
 
 输出示例：
@@ -144,13 +144,13 @@ python3 tools/probe_robot.py 10.20.20.120 --product-key BYWBPqSxeC
 
 ```bash
 # 实时监听，打印所有广播
-python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC
+python3 tools/sniff_all_topics.py 192.168.1.xxx BYWBPqSxeC
 
 # 保存到文件（同时也会在终端显示）
-python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC --out dump.json
+python3 tools/sniff_all_topics.py 192.168.1.xxx BYWBPqSxeC --out dump.json
 
 # 限制运行时长（秒）
-python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC --duration 60
+python3 tools/sniff_all_topics.py 192.168.1.xxx BYWBPqSxeC --duration 60
 ```
 
 使用技巧：
@@ -256,10 +256,10 @@ Use this when your model's product key is unknown. The script passively listens 
 
 ```bash
 # Passive listen (recommended)
-python3 tools/discover_product_key.py 10.20.20.120
+python3 tools/discover_product_key.py 192.168.1.xxx
 
 # If nothing is received after 10 seconds, add --wake to actively wake the robot
-python3 tools/discover_product_key.py 10.20.20.120 --wake
+python3 tools/discover_product_key.py 192.168.1.xxx --wake
 ```
 
 Sample output:
@@ -277,9 +277,9 @@ Please open a GitHub issue to contribute the key with your model name.
 Verifies the robot can be reached and shows its current state.
 
 ```bash
-python3 tools/probe_robot.py 10.20.20.120
+python3 tools/probe_robot.py 192.168.1.xxx
 # Optionally specify a known product key
-python3 tools/probe_robot.py 10.20.20.120 --product-key BYWBPqSxeC
+python3 tools/probe_robot.py 192.168.1.xxx --product-key BYWBPqSxeC
 ```
 
 Sample output:
@@ -300,13 +300,13 @@ Use this to capture unconfirmed command topics (cleaning mode, carpet detection,
 
 ```bash
 # Stream all broadcasts to terminal
-python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC
+python3 tools/sniff_all_topics.py 192.168.1.xxx BYWBPqSxeC
 
 # Also save to file
-python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC --out dump.json
+python3 tools/sniff_all_topics.py 192.168.1.xxx BYWBPqSxeC --out dump.json
 
 # Limit capture duration (seconds)
-python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC --duration 60
+python3 tools/sniff_all_topics.py 192.168.1.xxx BYWBPqSxeC --duration 60
 ```
 
 Tips:

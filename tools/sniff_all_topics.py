@@ -8,13 +8,13 @@ sniff_all_topics.py — 抓取机器人所有 WebSocket topic，解码 protobuf 
 
 用法：
   # 基础模式：被动监听所有广播
-  python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC
+  python3 tools/sniff_all_topics.py <robot_ip> <product_key>
 
   # 订阅模式：先发 active_robot_publish 再监听（更多 topic）
-  python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC --subscribe
+  python3 tools/sniff_all_topics.py <robot_ip> <product_key> --subscribe
 
   # 保存到文件
-  python3 tools/sniff_all_topics.py 10.20.20.120 BYWBPqSxeC --out dump.json
+  python3 tools/sniff_all_topics.py <robot_ip> <product_key> --out dump.json
 
 依赖：pip3 install websockets bbpb
 """
@@ -32,8 +32,8 @@ except ImportError:
     print("缺少依赖：pip3 install websockets bbpb")
     sys.exit(1)
 
-DEFAULT_HOST = "10.20.20.120"
-DEFAULT_KEY = "BYWBPqSxeC"
+DEFAULT_HOST = ""
+DEFAULT_KEY = ""
 DEFAULT_PORT = 9002
 
 
