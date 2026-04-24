@@ -525,10 +525,15 @@ class NarwalState:
     # Secondary confirmation signal.
     dock_field47: int = 0
 
-    # Cleaning settings (updated from command responses; pending broadcast topic discovery)
-    mop_humidity: int = 0      # MopHumidity enum value (0=dry, 1=normal, 2=wet)
-    cleaning_mode: int = 0     # 1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop
-    carpet_detection: bool | None = None
+    # Cleaning settings
+    # cleaning_mode is read from broadcast [3][1] + [47] (confirmed 2026-04-24):
+    #   1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop, 5=ai_managed
+    # mop_humidity is App-side only (not broadcast by robot); track locally after commands.
+    # Other switches (child_lock, carpet_priority, ai_detection, etc.) are base-station-side.
+    mop_humidity: int = 0      # MopHumidity enum value (0=dry, 1=normal, 2=wet); local-only
+    cleaning_mode: int = 0     # 1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop, 5=ai_managed
+    carpet_detection: bool | None = None   # field [28]: 1=off, 2=on
+    auto_detergent: bool | None = None     # field [16]: 1=on, absent=off
     ai_dirt_detection: bool | None = None
     ai_defecation_detection: bool | None = None
     child_lock: bool | None = None
@@ -639,12 +644,15 @@ class NarwalState:
 
         Dock indicators (validated via dock_research.py, 5 captures):
           Field 11 = 2 when docked, 1 when undocked
-                     NOTE: also encodes cleaning mode when not docked (2=mode A, 3=mode B)
-          Field 47 = 3 when docked, 2 when undocked
-                     NOTE: also encodes suction/mode when not docked (3=MAX?, 1=NORMAL?)
+          Field 47 = 3 when docked; also 1/2 during mode selection while docked
 
-        Settings (confirmed via sniff_all_topics.py, 2026-04-24):
+        Settings (confirmed via guided_capture.py, 2026-04-24):
           Field 28 = carpet detection: 1=off, 2=on
+          Field 16 = auto detergent: 1=on, absent/0=off
+          Field 3.1 = cleaning mode: 2=sweep/ai, 3=mop, 4=sweep_then_mop, 5=sweep_and_mop
+                      AI托管 distinguished by field 47=2 when field 3.1=2
+          Most other settings (child lock, mop humidity, carpet priority, AI detection,
+          base-station switches) are stored app/base-station-side and not broadcast.
 
         Note: field 32 mirrors field 3 exactly (redundant).
         """
@@ -687,6 +695,22 @@ class NarwalState:
                 self.dock_presence = int(field3.get("3", 0))
             except (ValueError, TypeError):
                 self.dock_presence = 0
+            # Cleaning mode from [3][1] + [47] (confirmed 2026-04-24).
+            # [3][1]=19 = docked/idle → leave cleaning_mode unchanged.
+            # AI托管 shares [3][1]=2 with sweep; [47]=2 distinguishes it.
+            try:
+                mode_raw = int(field3["1"])
+                f47_val = int(decoded["47"]) if "47" in decoded else 0
+                if mode_raw == 2:
+                    self.cleaning_mode = 5 if f47_val == 2 else 1  # 5=ai, 1=sweep
+                elif mode_raw == 3:
+                    self.cleaning_mode = 2  # mop
+                elif mode_raw == 4:
+                    self.cleaning_mode = 4  # sweep_then_mop
+                elif mode_raw == 5:
+                    self.cleaning_mode = 3  # sweep_and_mop
+            except (ValueError, TypeError):
+                pass
         if "2" in decoded:
             # Field 2 = real-time battery SOC as float32
             # (e.g. 1118175232 → 83.0%; bbp may return int or float)
@@ -697,9 +721,15 @@ class NarwalState:
             # Field 38 = static battery health (always 100, design capacity)
             self.battery_health = int(decoded["38"])
         if "28" in decoded:
-            # Field 28 = carpet detection: 1=off, 2=on (confirmed via sniff 2026-04-24)
+            # Field 28 = carpet detection: 1=off, 2=on (confirmed 2026-04-24)
             try:
                 self.carpet_detection = int(decoded["28"]) == 2
+            except (ValueError, TypeError):
+                pass
+        if "16" in decoded:
+            # Field 16 = auto detergent: 1=on, absent=off (confirmed 2026-04-24)
+            try:
+                self.auto_detergent = int(decoded["16"]) == 1
             except (ValueError, TypeError):
                 pass
         if "36" in decoded:

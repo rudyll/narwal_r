@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
 """
-sniff_all_topics.py — 抓取机器人所有 WebSocket topic，解码 protobuf 字段。
+sniff_all_topics.py — 抓取机器人所有 WebSocket 帧，解码 protobuf 字段。
+
+帧类型说明：
+  0x22 帧 (STATUS)  — 机器人主动广播的状态，所有连接客户端都能收到
+  0x2A 帧 (CMD_RSP) — 机器人对某条指令的响应，也广播给所有客户端
+                      ★ 在 App 操作后出现的 CMD_RSP 帧 topic 即为该操作的命令 topic
 
 用途：
-  1. 发现耗材/清扫模式/地毯检测等功能的 protobuf 字段编号
-  2. 当你在 App 里操作（切换清扫模式、调节出水量等），抓出对应的 topic+payload
+  1. 发现耗材/清扫模式/地毯检测等功能的命令 topic 和 payload
+  2. 在 App 里操作的同时，脚本实时显示 CMD_RSP 帧（命令响应）
+     和 STATUS 帧（状态变化），从而推断出命令 topic 和字段映射
 
 用法：
-  # 基础模式：被动监听所有广播
+  # 基础模式：被动监听所有帧（推荐）
   python3 tools/sniff_all_topics.py <robot_ip> <product_key>
 
   # 订阅模式：先发 active_robot_publish 再监听（更多 topic）
   python3 tools/sniff_all_topics.py <robot_ip> <product_key> --subscribe
 
-  # 保存到文件
+  # 保存到文件（同时也在终端显示）
   python3 tools/sniff_all_topics.py <robot_ip> <product_key> --out dump.json
 
 依赖：pip3 install websockets bbpb
@@ -39,14 +45,15 @@ DEFAULT_PORT = 9002
 
 def parse_topic(data: bytes):
     if len(data) < 4 or data[0] != 0x01 or data[2] not in (0x22, 0x2A):
-        return None, None
+        return None, None, None
+    frame_type = data[2]
     tlen = data[3]
     if len(data) < 4 + tlen:
-        return None, None
+        return None, None, None
     try:
-        return data[4:4 + tlen].decode("utf-8"), data[4 + tlen:]
+        return data[4:4 + tlen].decode("utf-8"), data[4 + tlen:], frame_type
     except UnicodeDecodeError:
-        return None, None
+        return None, None, None
 
 
 def build_frame(topic: str, payload: bytes = b"") -> bytes:
@@ -127,7 +134,7 @@ async def sniff(host: str, product_key: str, port: int, subscribe: bool, outfile
             except asyncio.TimeoutError:
                 continue
             if isinstance(raw, bytes):
-                topic, payload = parse_topic(raw)
+                topic, payload, _ = parse_topic(raw)
                 if topic:
                     parts = topic.split("/")
                     if len(parts) >= 3 and not device_id:
@@ -167,12 +174,29 @@ async def sniff(host: str, product_key: str, port: int, subscribe: bool, outfile
             if not isinstance(raw, bytes):
                 continue
 
-            topic, payload = parse_topic(raw)
+            topic, payload, frame_type = parse_topic(raw)
             if not topic or payload is None:
                 continue
 
             parts = topic.split("/")
             short = "/".join(parts[3:]) if len(parts) >= 4 else topic
+
+            # 0x2A = CMD_RSP：App 发给机器人的指令响应，广播给所有客户端
+            # ★ 这类帧的 topic 即为 App 使用的命令 topic
+            if frame_type == 0x2A:
+                try:
+                    decoded, _ = bbpb.decode_message(payload)
+                except Exception as e:
+                    decoded = None
+                print(f"\n{'*'*60}")
+                print(f"[CMD_RSP] {topic}  [{time.strftime('%H:%M:%S')}]")
+                if decoded:
+                    for k in sorted(decoded.keys(), key=lambda x: int(x) if str(x).isdigit() else 9999):
+                        print(f"  [{k}]: {fmt_value(decoded[k])}")
+                else:
+                    print(f"  (decode failed: {e})")
+                    print(f"  raw payload: {payload[:32].hex()}")
+                continue
 
             try:
                 decoded, _ = bbpb.decode_message(payload)
