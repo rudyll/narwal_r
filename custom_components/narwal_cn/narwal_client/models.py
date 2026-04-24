@@ -639,7 +639,12 @@ class NarwalState:
 
         Dock indicators (validated via dock_research.py, 5 captures):
           Field 11 = 2 when docked, 1 when undocked
+                     NOTE: also encodes cleaning mode when not docked (2=mode A, 3=mode B)
           Field 47 = 3 when docked, 2 when undocked
+                     NOTE: also encodes suction/mode when not docked (3=MAX?, 1=NORMAL?)
+
+        Settings (confirmed via sniff_all_topics.py, 2026-04-24):
+          Field 28 = carpet detection: 1=off, 2=on
 
         Note: field 32 mirrors field 3 exactly (redundant).
         """
@@ -691,6 +696,12 @@ class NarwalState:
         if "38" in decoded:
             # Field 38 = static battery health (always 100, design capacity)
             self.battery_health = int(decoded["38"])
+        if "28" in decoded:
+            # Field 28 = carpet detection: 1=off, 2=on (confirmed via sniff 2026-04-24)
+            try:
+                self.carpet_detection = int(decoded["28"]) == 2
+            except (ValueError, TypeError):
+                pass
         if "36" in decoded:
             self.timestamp = int(decoded["36"])
         if "13" in decoded:
