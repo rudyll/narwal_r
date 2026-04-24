@@ -13,6 +13,10 @@ venv/
 
 # Claude Code local settings
 .claude/
+CLAUDE.md
+
+# Reference repo (local only, not for distribution)
+NarwalIntegration-master/
 
 # HA dev
 *.log
