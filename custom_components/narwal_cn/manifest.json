@@ -1,0 +1,12 @@
+{
+  "domain": "narwal_cn",
+  "name": "云鲸扫地机器人 (中国版)",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/sjmotew/NarwalIntegration",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "requirements": ["bbpb>=1.4.0", "Pillow>=9.0.0"],
+  "version": "1.0.0"
+}

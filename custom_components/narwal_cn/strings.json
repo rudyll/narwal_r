@@ -1,0 +1,60 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "连接云鲸扫地机器人",
+        "description": "输入机器人 IP 地址并选择型号。",
+        "data": {
+          "host": "IP 地址",
+          "port": "端口",
+          "model": "型号"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "无法连接，请检查 IP 地址并确认机器人已开机。",
+      "unknown": "发生未知错误。"
+    },
+    "abort": {
+      "already_configured": "This vacuum is already configured."
+    }
+  },
+  "entity": {
+    "vacuum": {
+      "vacuum": {
+        "name": "Vacuum"
+      }
+    },
+    "sensor": {
+      "cleaning_area": {
+        "name": "Cleaning area"
+      },
+      "cleaning_time": {
+        "name": "Cleaning time"
+      },
+      "firmware_version": {
+        "name": "Firmware version"
+      },
+      "charging_state": {
+        "name": "Charging",
+        "state": {
+          "charging": "Charging",
+          "fully_charged": "Fully Charged",
+          "not_charging": "Not Charging"
+        }
+      }
+    },
+    "binary_sensor": {
+      "docked": {
+        "name": "Docked",
+        "state": {
+          "on": "Docked",
+          "off": "Undocked"
+        }
+      },
+      "charging": {
+        "name": "Charging"
+      }
+    }
+  }
+}
