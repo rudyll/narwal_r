@@ -60,7 +60,7 @@
       },
       "charging": {
         "name": "充电中"
-      },
+      }
     },
     "button": {
       "locate": {
@@ -102,7 +102,7 @@
           "strong": "强力",
           "max": "最强"
         }
-      },
+      }
     },
     "switch": {
       "carpet_detection": {

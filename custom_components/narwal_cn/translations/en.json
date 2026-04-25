@@ -50,7 +50,7 @@
           "on": "Docked",
           "off": "Undocked"
         }
-      },
+      }
     },
     "select": {
       "mop_humidity": {
@@ -78,7 +78,7 @@
           "strong": "Strong",
           "max": "Max"
         }
-      },
+      }
     },
     "switch": {
       "carpet_detection": {
