@@ -53,26 +53,6 @@ _SUCTION_TO_FAN_LEVEL = {
 }
 _SUCTION_FROM_FAN_LEVEL = {int(v): k for k, v in _SUCTION_TO_FAN_LEVEL.items()}
 
-# ── Obstacle avoidance ────────────────────────────────────────────────────────
-OBSTACLE_AVOIDANCE_OPTIONS = ["smart", "safe"]
-_OBSTACLE_VALUES = {"smart": 1, "safe": 2}
-_OBSTACLE_FROM_VALUE = {v: k for k, v in _OBSTACLE_VALUES.items()}
-
-# ── Mop dry strength ──────────────────────────────────────────────────────────
-MOP_DRY_STRENGTH_OPTIONS = ["quiet", "smart", "strong"]
-_MOP_DRY_VALUES = {"quiet": 1, "smart": 2, "strong": 3}
-_MOP_DRY_FROM_VALUE = {v: k for k, v in _MOP_DRY_VALUES.items()}
-
-# ── Dust collection strength ──────────────────────────────────────────────────
-DUST_STRENGTH_OPTIONS = ["quiet", "standard", "strong"]
-_DUST_STRENGTH_VALUES = {"quiet": 1, "standard": 2, "strong": 3}
-_DUST_STRENGTH_FROM_VALUE = {v: k for k, v in _DUST_STRENGTH_VALUES.items()}
-
-# ── Auto dust frequency ───────────────────────────────────────────────────────
-AUTO_DUST_FREQ_OPTIONS = ["smart", "every_time"]
-_AUTO_DUST_FREQ_VALUES = {"smart": 1, "every_time": 2}
-_AUTO_DUST_FREQ_FROM_VALUE = {v: k for k, v in _AUTO_DUST_FREQ_VALUES.items()}
-
 
 @dataclass(frozen=True, kw_only=True)
 class NarwalSelectDescription(SelectEntityDescription):
@@ -115,50 +95,6 @@ SELECT_DESCRIPTIONS: tuple[NarwalSelectDescription, ...] = (
         current_fn=lambda state: _SUCTION_FROM_FAN_LEVEL.get(state.fan_level),
         select_fn=lambda client, opt: client.set_fan_speed(
             _SUCTION_TO_FAN_LEVEL[opt]
-        ),
-    ),
-    NarwalSelectDescription(
-        key="obstacle_avoidance",
-        translation_key="obstacle_avoidance",
-        icon="mdi:shield-car",
-        entity_category=EntityCategory.CONFIG,
-        options_list=OBSTACLE_AVOIDANCE_OPTIONS,
-        current_fn=lambda state: _OBSTACLE_FROM_VALUE.get(state.obstacle_avoidance),
-        select_fn=lambda client, opt: client.set_obstacle_avoidance(
-            _OBSTACLE_VALUES[opt]
-        ),
-    ),
-    NarwalSelectDescription(
-        key="mop_dry_strength",
-        translation_key="mop_dry_strength",
-        icon="mdi:heat-wave",
-        entity_category=EntityCategory.CONFIG,
-        options_list=MOP_DRY_STRENGTH_OPTIONS,
-        current_fn=lambda state: _MOP_DRY_FROM_VALUE.get(state.mop_dry_strength),
-        select_fn=lambda client, opt: client.set_mop_dry_strength(
-            _MOP_DRY_VALUES[opt]
-        ),
-    ),
-    NarwalSelectDescription(
-        key="dust_collection_strength",
-        translation_key="dust_collection_strength",
-        icon="mdi:vacuum",
-        entity_category=EntityCategory.CONFIG,
-        options_list=DUST_STRENGTH_OPTIONS,
-        current_fn=lambda state: _DUST_STRENGTH_FROM_VALUE.get(state.dust_collection_strength),
-        select_fn=lambda client, opt: client.set_dust_collection_strength(
-            _DUST_STRENGTH_VALUES[opt]
-        ),
-    ),
-    NarwalSelectDescription(
-        key="auto_dust_frequency",
-        translation_key="auto_dust_frequency",
-        icon="mdi:calendar-sync",
-        entity_category=EntityCategory.CONFIG,
-        options_list=AUTO_DUST_FREQ_OPTIONS,
-        current_fn=lambda state: _AUTO_DUST_FREQ_FROM_VALUE.get(state.auto_dust_frequency),
-        select_fn=lambda client, opt: client.set_auto_dust_frequency(
-            _AUTO_DUST_FREQ_VALUES[opt]
         ),
     ),
 )

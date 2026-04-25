@@ -174,6 +174,10 @@ async def sniff(host: str, product_key: str, port: int, subscribe: bool, outfile
             if not isinstance(raw, bytes):
                 continue
 
+            # Debug: log unrecognized frame types
+            if len(raw) >= 3 and raw[0] == 0x01 and raw[2] not in (0x22, 0x2A):
+                print(f"\n[UNKNOWN frame type 0x{raw[2]:02X}] len={len(raw)} raw={raw[:32].hex()}")
+
             topic, payload, frame_type = parse_topic(raw)
             if not topic or payload is None:
                 continue

@@ -51,12 +51,6 @@
           "off": "Undocked"
         }
       },
-      "is_paused": {
-        "name": "Paused"
-      },
-      "is_returning": {
-        "name": "Returning to dock"
-      }
     },
     "select": {
       "mop_humidity": {
@@ -85,49 +79,10 @@
           "max": "Max"
         }
       },
-      "obstacle_avoidance": {
-        "name": "Obstacle avoidance",
-        "state": {
-          "smart": "Smart",
-          "safe": "Safe"
-        }
-      },
-      "mop_dry_strength": {
-        "name": "Mop drying strength",
-        "state": {
-          "quiet": "Quiet",
-          "smart": "Smart",
-          "strong": "Strong"
-        }
-      },
-      "dust_collection_strength": {
-        "name": "Dust collection strength",
-        "state": {
-          "quiet": "Quiet",
-          "standard": "Standard",
-          "strong": "Strong"
-        }
-      },
-      "auto_dust_frequency": {
-        "name": "Auto dust frequency",
-        "state": {
-          "smart": "Smart",
-          "every_time": "Every clean"
-        }
-      }
     },
     "switch": {
       "carpet_detection": {
         "name": "Carpet detection"
-      },
-      "carpet_priority": {
-        "name": "Carpet priority"
-      },
-      "carpet_deep_clean": {
-        "name": "Carpet deep clean"
-      },
-      "deep_corner_clean": {
-        "name": "Deep corner clean"
       },
       "ai_dirt_detection": {
         "name": "AI dirt detection"
@@ -135,29 +90,8 @@
       "ai_defecation_detection": {
         "name": "AI defecation detection"
       },
-      "pet_dirt_detection": {
-        "name": "Pet dirt detection"
-      },
       "child_lock": {
         "name": "Child lock"
-      },
-      "dnd_mode": {
-        "name": "Do not disturb"
-      },
-      "altitude_mode": {
-        "name": "High altitude mode"
-      },
-      "auto_power_off": {
-        "name": "Auto power off"
-      },
-      "hot_water_wash": {
-        "name": "Hot water mop wash"
-      },
-      "antibacterial_mode": {
-        "name": "Antibacterial mode"
-      },
-      "auto_dust": {
-        "name": "Auto dust collection"
       }
     }
   }
