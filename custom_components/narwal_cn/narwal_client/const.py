@@ -96,6 +96,22 @@ TOPIC_CMD_SET_AI_DIRT_DETECT = "clean/set_ai_dirt_detect"  # 0=off 1=on
 TOPIC_CMD_SET_AI_DEFECATION_DETECT = "clean/set_ai_defecation_detect"  # 0=off 1=on
 TOPIC_CMD_SET_CHILD_LOCK = "device/set_child_lock"         # 0=off 1=on
 
+# Additional settings — pending topic confirmation via sniff_all_topics.py
+TOPIC_CMD_SET_CARPET_PRIORITY = "clean/set_carpet_priority"   # 0=off 1=on
+TOPIC_CMD_SET_CARPET_DEEP = "clean/set_carpet_deep"           # 0=off 1=on
+TOPIC_CMD_SET_DEEP_CORNER = "clean/set_deep_corner"           # 0=off 1=on
+TOPIC_CMD_SET_OBSTACLE_MODE = "clean/set_obstacle_mode"       # 1=smart 2=safe
+TOPIC_CMD_SET_PET_DIRT = "clean/set_pet_dirt"                 # 0=off 1=on
+TOPIC_CMD_SET_DND = "device/set_dnd"                          # 0=off 1=on
+TOPIC_CMD_SET_ALTITUDE = "device/set_altitude"                # 0=off 1=on
+TOPIC_CMD_SET_AUTO_POWER_OFF = "device/set_auto_power_off"    # 0=off 1=on
+TOPIC_CMD_SET_HOT_WATER = "supply/set_hot_water"              # 0=off 1=on
+TOPIC_CMD_SET_ANTIBACTERIAL = "supply/set_antibacterial"      # 0=off 1=on
+TOPIC_CMD_SET_AUTO_DUST = "supply/set_auto_dust"              # 0=off 1=on
+TOPIC_CMD_SET_MOP_DRY_STRENGTH = "supply/set_mop_dry_strength"  # 1=quiet 2=smart 3=strong
+TOPIC_CMD_SET_DUST_STRENGTH = "supply/set_dust_strength"        # 1=quiet 2=standard 3=strong
+TOPIC_CMD_SET_AUTO_DUST_FREQ = "supply/set_auto_dust_freq"      # 1=smart 2=every
+
 # Map
 TOPIC_CMD_GET_MAP = "map/get_map"
 TOPIC_CMD_GET_ALL_MAPS = "map/get_all_reduced_maps"

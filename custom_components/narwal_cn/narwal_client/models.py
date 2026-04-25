@@ -538,6 +538,29 @@ class NarwalState:
     ai_defecation_detection: bool | None = None
     child_lock: bool | None = None
 
+    # Suction level — local only (not in broadcast); set by set_fan_speed()
+    fan_level: int | None = None  # FanLevel enum value: 0=quiet 1=normal 2=strong 3=max
+
+    # Robot cleaning switches — local only, not broadcast; None until commanded
+    carpet_priority: bool | None = None
+    carpet_deep_clean: bool | None = None
+    deep_corner_clean: bool | None = None
+    pet_dirt_detection: bool | None = None
+
+    # Base station switches — local only, not broadcast; None until commanded
+    dnd_mode: bool | None = None
+    altitude_mode: bool | None = None
+    auto_power_off: bool | None = None
+    hot_water_wash: bool | None = None
+    antibacterial_mode: bool | None = None
+    auto_dust: bool | None = None
+
+    # Base station selects — local only, not broadcast; None until commanded
+    obstacle_avoidance: int | None = None   # 1=smart 2=safe
+    mop_dry_strength: int | None = None     # 1=quiet 2=smart 3=strong
+    dust_collection_strength: int | None = None  # 1=quiet 2=standard 3=strong
+    auto_dust_frequency: int | None = None  # 1=smart 2=every
+
     # Raw data for fields we haven't fully decoded yet
     raw_base_status: dict[str, Any] = field(default_factory=dict)
     raw_working_status: dict[str, Any] = field(default_factory=dict)

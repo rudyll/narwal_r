@@ -23,6 +23,8 @@ async def async_setup_entry(
     coordinator = entry.runtime_data
     async_add_entities([
         NarwalDockedSensor(coordinator),
+        NarwalPausedSensor(coordinator),
+        NarwalReturningSensor(coordinator),
     ])
 
 
@@ -46,3 +48,37 @@ class NarwalDockedSensor(NarwalEntity, BinarySensorEntity):
         return state.is_docked
 
 
+class NarwalPausedSensor(NarwalEntity, BinarySensorEntity):
+    """Binary sensor that reports whether the vacuum is paused."""
+
+    _attr_translation_key = "is_paused"
+
+    def __init__(self, coordinator: NarwalCoordinator) -> None:
+        super().__init__(coordinator)
+        device_id = coordinator.config_entry.data["device_id"]
+        self._attr_unique_id = f"{device_id}_is_paused"
+
+    @property
+    def is_on(self) -> bool | None:
+        state = self.coordinator.data
+        if state is None:
+            return None
+        return state.is_paused
+
+
+class NarwalReturningSensor(NarwalEntity, BinarySensorEntity):
+    """Binary sensor that reports whether the vacuum is returning to dock."""
+
+    _attr_translation_key = "is_returning"
+
+    def __init__(self, coordinator: NarwalCoordinator) -> None:
+        super().__init__(coordinator)
+        device_id = coordinator.config_entry.data["device_id"]
+        self._attr_unique_id = f"{device_id}_is_returning"
+
+    @property
+    def is_on(self) -> bool | None:
+        state = self.coordinator.data
+        if state is None:
+            return None
+        return state.is_returning

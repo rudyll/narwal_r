@@ -60,6 +60,12 @@
       },
       "charging": {
         "name": "充电中"
+      },
+      "is_paused": {
+        "name": "已暂停"
+      },
+      "is_returning": {
+        "name": "返回基站中"
       }
     },
     "button": {
@@ -93,11 +99,59 @@
           "sweep_and_mop": "扫拖同步",
           "sweep_then_mop": "先扫后拖"
         }
+      },
+      "suction_level": {
+        "name": "吸力等级",
+        "state": {
+          "quiet": "静音",
+          "standard": "标准",
+          "strong": "强力",
+          "max": "最强"
+        }
+      },
+      "obstacle_avoidance": {
+        "name": "避障模式",
+        "state": {
+          "smart": "智能避障",
+          "safe": "安全避障"
+        }
+      },
+      "mop_dry_strength": {
+        "name": "拖布烘干强度",
+        "state": {
+          "quiet": "静音",
+          "smart": "智能",
+          "strong": "强力"
+        }
+      },
+      "dust_collection_strength": {
+        "name": "集尘强度",
+        "state": {
+          "quiet": "静音",
+          "standard": "标准",
+          "strong": "强力"
+        }
+      },
+      "auto_dust_frequency": {
+        "name": "自动集尘频率",
+        "state": {
+          "smart": "智能",
+          "every_time": "每次清扫"
+        }
       }
     },
     "switch": {
       "carpet_detection": {
         "name": "地毯检测"
+      },
+      "carpet_priority": {
+        "name": "地毯优先"
+      },
+      "carpet_deep_clean": {
+        "name": "地毯深度清洁"
+      },
+      "deep_corner_clean": {
+        "name": "深度沿边清洁"
       },
       "ai_dirt_detection": {
         "name": "AI 污渍检测"
@@ -105,8 +159,29 @@
       "ai_defecation_detection": {
         "name": "AI 排泄物检测"
       },
+      "pet_dirt_detection": {
+        "name": "宠物污渍检测"
+      },
       "child_lock": {
         "name": "童锁"
+      },
+      "dnd_mode": {
+        "name": "免打扰模式"
+      },
+      "altitude_mode": {
+        "name": "高原模式"
+      },
+      "auto_power_off": {
+        "name": "自动关机"
+      },
+      "hot_water_wash": {
+        "name": "热水洗拖布"
+      },
+      "antibacterial_mode": {
+        "name": "抑菌模式"
+      },
+      "auto_dust": {
+        "name": "自动集尘"
       }
     }
   }

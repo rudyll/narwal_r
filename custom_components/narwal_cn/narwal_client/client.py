@@ -52,6 +52,20 @@ from .const import (
     TOPIC_CMD_SET_AI_DIRT_DETECT,
     TOPIC_CMD_SET_AI_DEFECATION_DETECT,
     TOPIC_CMD_SET_CHILD_LOCK,
+    TOPIC_CMD_SET_CARPET_PRIORITY,
+    TOPIC_CMD_SET_CARPET_DEEP,
+    TOPIC_CMD_SET_DEEP_CORNER,
+    TOPIC_CMD_SET_OBSTACLE_MODE,
+    TOPIC_CMD_SET_PET_DIRT,
+    TOPIC_CMD_SET_DND,
+    TOPIC_CMD_SET_ALTITUDE,
+    TOPIC_CMD_SET_AUTO_POWER_OFF,
+    TOPIC_CMD_SET_HOT_WATER,
+    TOPIC_CMD_SET_ANTIBACTERIAL,
+    TOPIC_CMD_SET_AUTO_DUST,
+    TOPIC_CMD_SET_MOP_DRY_STRENGTH,
+    TOPIC_CMD_SET_DUST_STRENGTH,
+    TOPIC_CMD_SET_AUTO_DUST_FREQ,
     DEFAULT_TOPIC_PREFIX,
     WAKE_TIMEOUT,
     CommandResult,
@@ -1110,6 +1124,76 @@ class NarwalClient:
         """Enable or disable child lock."""
         payload = b"\x08\x01" if enabled else b"\x08\x00"
         return await self.send_command(TOPIC_CMD_SET_CHILD_LOCK, payload)
+
+    async def set_carpet_priority(self, enabled: bool) -> CommandResponse:
+        """Enable or disable carpet priority mode."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_CARPET_PRIORITY, payload)
+
+    async def set_carpet_deep_clean(self, enabled: bool) -> CommandResponse:
+        """Enable or disable carpet deep clean."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_CARPET_DEEP, payload)
+
+    async def set_deep_corner_clean(self, enabled: bool) -> CommandResponse:
+        """Enable or disable deep corner cleaning."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_DEEP_CORNER, payload)
+
+    async def set_obstacle_avoidance(self, mode: int) -> CommandResponse:
+        """Set obstacle avoidance mode (1=smart, 2=safe)."""
+        payload = b"\x08" + bytes([mode & 0x7F])
+        return await self.send_command(TOPIC_CMD_SET_OBSTACLE_MODE, payload)
+
+    async def set_pet_dirt_detection(self, enabled: bool) -> CommandResponse:
+        """Enable or disable pet dirt detection."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_PET_DIRT, payload)
+
+    async def set_dnd_mode(self, enabled: bool) -> CommandResponse:
+        """Enable or disable Do Not Disturb mode."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_DND, payload)
+
+    async def set_altitude_mode(self, enabled: bool) -> CommandResponse:
+        """Enable or disable high altitude mode."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_ALTITUDE, payload)
+
+    async def set_auto_power_off(self, enabled: bool) -> CommandResponse:
+        """Enable or disable auto power off."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_AUTO_POWER_OFF, payload)
+
+    async def set_hot_water_wash(self, enabled: bool) -> CommandResponse:
+        """Enable or disable hot water mop wash."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_HOT_WATER, payload)
+
+    async def set_antibacterial_mode(self, enabled: bool) -> CommandResponse:
+        """Enable or disable antibacterial mode."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_ANTIBACTERIAL, payload)
+
+    async def set_auto_dust(self, enabled: bool) -> CommandResponse:
+        """Enable or disable automatic dust collection."""
+        payload = b"\x08\x01" if enabled else b"\x08\x00"
+        return await self.send_command(TOPIC_CMD_SET_AUTO_DUST, payload)
+
+    async def set_mop_dry_strength(self, level: int) -> CommandResponse:
+        """Set mop drying strength (1=quiet, 2=smart, 3=strong)."""
+        payload = b"\x08" + bytes([level & 0x7F])
+        return await self.send_command(TOPIC_CMD_SET_MOP_DRY_STRENGTH, payload)
+
+    async def set_dust_collection_strength(self, level: int) -> CommandResponse:
+        """Set dust collection strength (1=quiet, 2=standard, 3=strong)."""
+        payload = b"\x08" + bytes([level & 0x7F])
+        return await self.send_command(TOPIC_CMD_SET_DUST_STRENGTH, payload)
+
+    async def set_auto_dust_frequency(self, freq: int) -> CommandResponse:
+        """Set auto dust collection frequency (1=smart, 2=every_time)."""
+        payload = b"\x08" + bytes([freq & 0x7F])
+        return await self.send_command(TOPIC_CMD_SET_AUTO_DUST_FREQ, payload)
 
     # --- Query commands ---
 
