@@ -4,7 +4,7 @@ from homeassistant.const import Platform
 
 from .narwal_client import FanLevel
 
-DOMAIN = "narwal_cn"
+DOMAIN = "narwal_r"
 DEFAULT_PORT = 9002
 
 MANUFACTURER = "云鲸"
