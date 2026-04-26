@@ -531,15 +531,15 @@ class NarwalState:
     # mop_humidity is App-side only (not broadcast by robot); track locally after commands.
     # Other switches (child_lock, carpet_priority, ai_detection, etc.) are base-station-side.
     mop_humidity: int = 0      # MopHumidity enum value (0=dry, 1=normal, 2=wet); local-only
-    cleaning_mode: int = 0     # 1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop, 5=ai_managed
+    cleaning_mode: int = 1     # 1=sweep, 2=mop, 3=sweep_and_mop, 4=sweep_then_mop, 5=ai_managed
     carpet_detection: bool | None = None   # field [28]: 1=off, 2=on
     auto_detergent: bool | None = None     # field [16]: 1=on, absent=off
-    ai_dirt_detection: bool | None = None
-    ai_defecation_detection: bool | None = None
-    child_lock: bool | None = None
+    ai_dirt_detection: bool = False        # base-station-side; not broadcast — default False
+    ai_defecation_detection: bool = False  # base-station-side; not broadcast — default False
+    child_lock: bool = False               # base-station-side; not broadcast — default False
 
     # Suction level — local only (not in broadcast); set by set_fan_speed()
-    fan_level: int | None = None  # FanLevel enum value: 0=quiet 1=normal 2=strong 3=max
+    fan_level: int = 1  # FanLevel enum value: 0=quiet 1=normal 2=strong 3=max; default NORMAL
 
     # Raw data for fields we haven't fully decoded yet
     raw_base_status: dict[str, Any] = field(default_factory=dict)
