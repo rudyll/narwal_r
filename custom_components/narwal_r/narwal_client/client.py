@@ -1132,6 +1132,8 @@ class NarwalClient:
             firmware_version=_clean_bytes(data.get("3", "")),
         )
         self.state.device_info = info
+        if info.firmware_version:
+            self.state.firmware_version = info.firmware_version
 
         # Update topic prefix to match this device's product key
         if info.product_key:

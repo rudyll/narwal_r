@@ -17,13 +17,17 @@ class NarwalEntity(CoordinatorEntity[NarwalCoordinator]):
     def __init__(self, coordinator: NarwalCoordinator) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
-        device_id = coordinator.config_entry.data["device_id"]
-        self._attr_device_info = DeviceInfo(
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device info, including live firmware version."""
+        device_id = self.coordinator.config_entry.data["device_id"]
+        return DeviceInfo(
             identifiers={(DOMAIN, device_id)},
             manufacturer=MANUFACTURER,
             model=MODEL,
-            sw_version=coordinator.client.state.firmware_version or None,
-            name=coordinator.config_entry.title,
+            sw_version=self.coordinator.client.state.firmware_version or None,
+            name=self.coordinator.config_entry.title,
         )
 
     @property
