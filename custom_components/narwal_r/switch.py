@@ -12,7 +12,6 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from homeassistant.exceptions import HomeAssistantError
 
 from . import NarwalConfigEntry
 from .coordinator import NarwalCoordinator
@@ -20,11 +19,6 @@ from .entity import NarwalEntity
 from .narwal_client import NarwalClient, NarwalCommandError, NarwalState
 
 _LOGGER = logging.getLogger(__name__)
-
-# NOTE: All topics in this file are pending confirmation via sniff_all_topics.py.
-# Run the sniffer while toggling each feature in the App to capture the exact
-# topic and payload format.  Update narwal_client/const.py and client.py
-# accordingly once confirmed.
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -34,6 +28,8 @@ class NarwalSwitchDescription(SwitchEntityDescription):
     is_on_fn: Callable[[NarwalState], bool | None]
     turn_on_fn: Callable[[NarwalClient], Coroutine[Any, Any, Any]]
     turn_off_fn: Callable[[NarwalClient], Coroutine[Any, Any, Any]]
+    # True = 机器人从不广播此值，HA 显示"推测状态"而非误导性的确定值
+    assumed_state: bool = False
 
 
 SWITCH_DESCRIPTIONS: tuple[NarwalSwitchDescription, ...] = (
@@ -42,6 +38,7 @@ SWITCH_DESCRIPTIONS: tuple[NarwalSwitchDescription, ...] = (
         translation_key="carpet_detection",
         icon="mdi:rug",
         entity_category=EntityCategory.CONFIG,
+        assumed_state=False,  # 从广播 field 28 读取真实值
         is_on_fn=lambda state: state.carpet_detection,
         turn_on_fn=lambda client: client.set_carpet_detection(True),
         turn_off_fn=lambda client: client.set_carpet_detection(False),
@@ -51,6 +48,7 @@ SWITCH_DESCRIPTIONS: tuple[NarwalSwitchDescription, ...] = (
         translation_key="ai_dirt_detection",
         icon="mdi:robot-vacuum",
         entity_category=EntityCategory.CONFIG,
+        assumed_state=True,  # 机器人不广播，状态为推测值
         is_on_fn=lambda state: state.ai_dirt_detection,
         turn_on_fn=lambda client: client.set_ai_dirt_detection(True),
         turn_off_fn=lambda client: client.set_ai_dirt_detection(False),
@@ -60,6 +58,7 @@ SWITCH_DESCRIPTIONS: tuple[NarwalSwitchDescription, ...] = (
         translation_key="ai_defecation_detection",
         icon="mdi:alert-circle-outline",
         entity_category=EntityCategory.CONFIG,
+        assumed_state=True,  # 机器人不广播，状态为推测值
         is_on_fn=lambda state: state.ai_defecation_detection,
         turn_on_fn=lambda client: client.set_ai_defecation_detection(True),
         turn_off_fn=lambda client: client.set_ai_defecation_detection(False),
@@ -69,6 +68,7 @@ SWITCH_DESCRIPTIONS: tuple[NarwalSwitchDescription, ...] = (
         translation_key="child_lock",
         icon="mdi:lock",
         entity_category=EntityCategory.CONFIG,
+        assumed_state=True,  # 机器人不广播，状态为推测值
         is_on_fn=lambda state: state.child_lock,
         turn_on_fn=lambda client: client.set_child_lock(True),
         turn_off_fn=lambda client: client.set_child_lock(False),
@@ -100,6 +100,7 @@ class NarwalSwitch(NarwalEntity, SwitchEntity):
         self.entity_description = description
         device_id = coordinator.config_entry.data["device_id"]
         self._attr_unique_id = f"{device_id}_{description.key}"
+        self._attr_assumed_state = description.assumed_state
 
     @property
     def is_on(self) -> bool | None:
@@ -113,12 +114,12 @@ class NarwalSwitch(NarwalEntity, SwitchEntity):
         try:
             await self.entity_description.turn_on_fn(self.coordinator.client)
         except NarwalCommandError as err:
-            raise HomeAssistantError(str(err)) from err
+            _LOGGER.warning("Command failed for %s (not supported on local WS): %s", self.entity_description.key, err)
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         try:
             await self.entity_description.turn_off_fn(self.coordinator.client)
         except NarwalCommandError as err:
-            raise HomeAssistantError(str(err)) from err
+            _LOGGER.warning("Command failed for %s (not supported on local WS): %s", self.entity_description.key, err)
         await self.coordinator.async_request_refresh()

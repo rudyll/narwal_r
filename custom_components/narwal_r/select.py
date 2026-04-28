@@ -12,7 +12,6 @@ from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from homeassistant.exceptions import HomeAssistantError
 
 from . import NarwalConfigEntry
 from .coordinator import NarwalCoordinator
@@ -139,5 +138,5 @@ class NarwalSelect(NarwalEntity, SelectEntity):
         try:
             await self.entity_description.select_fn(self.coordinator.client, option)
         except NarwalCommandError as err:
-            raise HomeAssistantError(str(err)) from err
+            _LOGGER.warning("Command failed for %s (not supported on local WS): %s", self.entity_description.key, err)
         await self.coordinator.async_request_refresh()
