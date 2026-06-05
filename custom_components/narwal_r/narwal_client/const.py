@@ -48,6 +48,7 @@ KNOWN_PRODUCT_KEYS = [
     "6NjIDYxBXb",   # J4Lite (APK, contributed by @northwestsupra)
     "hEA7OEshlx",   # J5  (APK, contributed by @northwestsupra)
     "cUlfJN5JYP",   # Unknown model (APK, contributed by @northwestsupra)
+    "CGjuB6dzq7",   # JX (contributed by user)
 ]
 
 # --- Status topics (robot → client, field 4 / 0x22 frames) ---
