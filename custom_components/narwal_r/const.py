@@ -18,8 +18,8 @@ MODEL = "逍遥002 Max"
 # a GitHub issue after running tools/discover_product_key.py.
 NARWAL_MODELS: dict[str, str] = {
     # ── J series ────────────────────────────────────────────────────────────
-    "Narwal J4 / J4 Pure": "EHf6cRNRGT",
-    "Narwal J4 Lite": "6NjIDYxBXb",
+    "Narwal J4 / J4 Pure [cloud-only]": "EHf6cRNRGT",
+    "Narwal J4 Lite [cloud-only]": "6NjIDYxBXb",
     "Narwal J5": "hEA7OEshlx",
     # J5C / J5X — product_key unknown; run tools/discover_product_key.py and
     # open a GitHub issue to contribute it.

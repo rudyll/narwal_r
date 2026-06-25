@@ -44,8 +44,7 @@ KNOWN_PRODUCT_KEYS = [
     "OlkUn3oUCu",   # CX3 / CX3Pure
     "mvlduyye85",   # X30
     "pcbfh2ldvx",   # X31
-    "EHf6cRNRGT",   # J4 / J4Pure (APK, contributed by @northwestsupra)
-    "6NjIDYxBXb",   # J4Lite (APK, contributed by @northwestsupra)
+    # J4 / J4Lite: confirmed cloud-only (port 9002 not open) — excluded from discovery
     "hEA7OEshlx",   # J5  (APK, contributed by @northwestsupra)
     "cUlfJN5JYP",   # Unknown model (APK, contributed by @northwestsupra)
     "CGjuB6dzq7",   # JX (contributed by user)
