@@ -40,7 +40,7 @@
 
 | 实体 | 说明 |
 |------|------|
-| **吸尘器** | 开始/暂停/停止清扫、回充、按房间清扫 |
+| **吸尘器** | 开始/暂停/停止清扫、回充、按房间清扫（已确认本地支持）|
 | **电池传感器** | 实时电量 |
 | **清扫面积传感器** | 本次清扫面积（m²） |
 | **清扫时间传感器** | 本次清扫已用时间 |
@@ -196,7 +196,7 @@ All models that support local WebSocket (port 9002) are supported. The following
 
 | Entity | Description |
 |--------|-------------|
-| **Vacuum** | Start, pause, stop, return to dock, room-by-room cleaning |
+| **Vacuum** | Start, pause, stop, return to dock, room-by-room cleaning (confirmed local) |
 | **Battery sensor** | Real-time charge level |
 | **Cleaning area sensor** | Current session area (m²) |
 | **Cleaning time sensor** | Current session elapsed time |
