@@ -8,5 +8,5 @@
   "integration_type": "device",
   "iot_class": "local_push",
   "requirements": ["bbpb>=1.4.0", "Pillow>=9.0.0"],
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
