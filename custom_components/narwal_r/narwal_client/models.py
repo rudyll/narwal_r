@@ -46,22 +46,22 @@ class RoomInfo:
     def __post_init__(self):
         if self.ROOM_TYPE_NAMES is None:
             object.__setattr__(self, "ROOM_TYPE_NAMES", {
-                0: "Room",
-                1: "Primary Bedroom",
-                2: "Secondary Bedroom",
-                3: "Living Room",
-                4: "Kitchen",
-                5: "Study",
-                6: "Bathroom",
-                7: "Dining Room",
-                8: "Corridor",
-                9: "Balcony",
-                10: "Utility Room",
-                11: "Cloak Room",
-                12: "Nursery",
-                13: "Recreation Room",
-                14: "Shower Room",
-                15: "Other",
+                0: "房间",
+                1: "主卧",
+                2: "次卧",
+                3: "客厅",
+                4: "厨房",
+                5: "书房",
+                6: "卫生间",
+                7: "餐厅",
+                8: "走廊",
+                9: "阳台",
+                10: "多功能室",
+                11: "衣帽间",
+                12: "儿童房",
+                13: "娱乐室",
+                14: "淋浴间",
+                15: "其他",
             })
 
     @property
