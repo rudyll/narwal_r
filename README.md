@@ -1,7 +1,7 @@
 # 云鲸扫地机器人 — Home Assistant 集成 / Narwal CN Integration
 
 <p align="center">
-  <img src="custom_components/narwal_cn/brand/narwal_robotics_logo.jpeg" alt="Narwal" width="200"/>
+  <img src="custom_components/narwal_r/brand/narwal_robotics_logo.jpeg" alt="Narwal" width="200"/>
 </p>
 
 <p align="center">
@@ -25,16 +25,16 @@
 | 型号 | 说明 |
 |------|------|
 | 云鲸逍遥002 Max (CX7) | ✅ 本地 WebSocket 已确认 |
+| 云鲸 JX | ✅ 社区确认 |
 | Narwal Flow (AX12) | ✅ 已确认 |
 | Narwal Freo Z10 Ultra (CX4) | ✅ 社区确认 |
 | Narwal Freo X10 Pro (AX15) | ✅ 社区确认 |
-| Narwal J4 / J4 Pure | APK 来源 |
-| Narwal J4 Lite | APK 来源 |
-| Narwal J5 | APK 来源 |
+| Narwal J5 | APK 来源，待验证 |
+| Narwal J3 / J4 / J4 Lite | ☁️ 仅云端，本地 9002 不通 |
 | Narwal Freo X Ultra (AX18) | ☁️ 仅云端，不支持本地 |
-| 其他 AX / BX / CX / X 系列 | 产品密钥来源于 APK 分析 |
+| 其他 AX / BX / CX / X 系列 | 产品密钥来源于 APK 分析，待验证 |
 
-> **J5C、J5X 及更新型号：** 产品密钥尚未确认。如果你拥有这些型号，请运行 `tools/discover_product_key.py` 并提交 GitHub Issue 贡献密钥。
+> **密钥未知的型号：** 请运行 `tools/discover_product_key.py` 并提交 GitHub Issue 贡献密钥，注明机器人型号。
 
 ### 功能
 
@@ -47,32 +47,32 @@
 | **固件版本传感器** | 当前固件版本号 |
 | **充电状态传感器** | 充电中 / 已充满 / 未充电 |
 | **停靠状态二元传感器** | 是否在基站上 |
-| **充电中二元传感器** | 是否正在充电 |
 | **摄像头** | 实时地图及机器人位置叠加 |
-| **拖地湿度下拉选择** | 干拖 / 标准 / 湿拖 |
-| **清洁模式下拉选择** | 仅扫地 / 仅拖地 / 扫拖同步 / 先扫后拖 |
-| **地毯检测开关** | 开启/关闭地毯识别 |
-| **AI 污渍检测开关** | 开启/关闭 AI 污渍识别 |
-| **AI 排泄物检测开关** | 开启/关闭宠物排泄物识别 |
-| **童锁开关** | 开启/关闭机器实体按键锁 |
+| **拖地湿度下拉选择** | 干拖 / 标准 / 湿拖（显示广播值，写入待验证）|
+| **吸力等级下拉选择** | 静音 / 标准 / 强力 / 最强（显示广播值，写入待验证）|
+| **清洁模式下拉选择** | 扫地 / 拖地 / 扫拖同步 / 先扫后拖（只读，来自广播）|
+| **地毯检测开关** | 显示广播真实值，写入待验证 |
+| **AI 污渍检测开关** | 状态为推测值（机器人不广播）|
+| **AI 排泄物检测开关** | 状态为推测值（机器人不广播）|
+| **童锁开关** | 状态为推测值（机器人不广播）|
 | **寻找机器人按钮** | 让机器人发出声音报告位置 |
 | **清洗拖布按钮** | 触发拖布清洗程序 |
 | **烘干拖布按钮** | 触发拖布烘干程序 |
 | **清空尘盒按钮** | 触发自动集尘 |
 
-> 注：清洁模式、地毯检测、AI 功能和童锁的指令 topic 尚待通过 `tools/sniff_all_topics.py` 抓包确认，核心清扫功能均已完整验证。
+> 注：本集成仅使用本地 WebSocket（端口 9002）。清洁模式、AI 检测、童锁等功能的写入指令目前在本地协议下不生效（机器人无响应），相关实体仅展示状态供参考。
 
 ### 安装方式
 
 #### HACS（推荐）
 
 1. 在 HACS → **自定义存储库** → 添加 `https://github.com/rudyll/narwal_r`，类型选 **Integration**
-2. 搜索 "Narwal CN" 并安装
+2. 搜索 "Narwal" 并安装
 3. 重启 Home Assistant
 
 #### 手动安装
 
-1. 将 `custom_components/narwal_cn/` 复制到 HA 的 `custom_components/` 目录下
+1. 将 `custom_components/narwal_r/` 复制到 HA 的 `custom_components/` 目录下
 2. 重启 Home Assistant
 
 ### 配置步骤
@@ -181,16 +181,16 @@ All models that support local WebSocket (port 9002) are supported. The following
 | Model | Notes |
 |-------|-------|
 | 云鲸逍遥002 Max (CX7) | ✅ Confirmed local WebSocket |
+| 云鲸 JX | ✅ Confirmed by community |
 | Narwal Flow (AX12) | ✅ Confirmed |
 | Narwal Freo Z10 Ultra (CX4) | ✅ Confirmed by community |
 | Narwal Freo X10 Pro (AX15) | ✅ Confirmed by community |
-| Narwal J4 / J4 Pure | Sourced from APK |
-| Narwal J4 Lite | Sourced from APK |
-| Narwal J5 | Sourced from APK |
+| Narwal J5 | From APK, unverified |
+| Narwal J3 / J4 / J4 Lite | ☁️ Cloud-only — port 9002 not open |
 | Narwal Freo X Ultra (AX18) | ☁️ Cloud-only — local not supported |
-| Other AX / BX / CX / X models | Product keys extracted from APK |
+| Other AX / BX / CX / X models | Product keys from APK, unverified |
 
-> **J5C, J5X, and other newer models:** product key unknown. If you own one, run `tools/discover_product_key.py` and open a GitHub issue to contribute it.
+> **Unknown product key?** Run `tools/discover_product_key.py` and open a GitHub issue with your model name to contribute it.
 
 ### Features
 
@@ -203,32 +203,32 @@ All models that support local WebSocket (port 9002) are supported. The following
 | **Firmware version sensor** | Installed firmware string |
 | **Charging state sensor** | Charging / fully charged / not charging |
 | **Docked binary sensor** | Whether the robot is on the dock |
-| **Charging binary sensor** | Whether the robot is currently charging |
 | **Camera** | Live map with robot position overlay |
-| **Mop humidity select** | Dry / Normal / Wet |
-| **Cleaning mode select** | Sweep / Mop / Sweep & Mop / Sweep then Mop |
-| **Carpet detection switch** | Enable/disable carpet detection |
-| **AI dirt detection switch** | Enable/disable AI dirt detection |
-| **AI defecation detection switch** | Enable/disable pet waste detection |
-| **Child lock switch** | Enable/disable physical button lock |
+| **Mop humidity select** | Dry / Normal / Wet (displays broadcast value; write unverified) |
+| **Suction level select** | Quiet / Standard / Strong / Max (displays broadcast value; write unverified) |
+| **Cleaning mode select** | Sweep / Mop / Sweep & Mop / Sweep then Mop (read-only from broadcast) |
+| **Carpet detection switch** | Displays real broadcast value; write unverified |
+| **AI dirt detection switch** | Assumed state — not broadcast by robot |
+| **AI defecation detection switch** | Assumed state — not broadcast by robot |
+| **Child lock switch** | Assumed state — not broadcast by robot |
 | **Locate button** | Make the robot announce its position |
 | **Wash mop button** | Trigger mop pad wash cycle |
 | **Dry mop button** | Trigger mop pad drying |
 | **Empty dustbin button** | Trigger auto-empty cycle |
 
-> Note: cleaning mode, carpet/AI detection, and child lock topics are pending confirmation via `tools/sniff_all_topics.py`. Core cleaning functions are fully confirmed.
+> Note: this integration uses the local WebSocket only (port 9002). Write commands for cleaning mode, AI detection, child lock, and similar settings do not get a response from the robot over the local protocol — these entities are display-only.
 
 ### Installation
 
 #### HACS (recommended)
 
 1. In HACS → **Custom repositories** → add `https://github.com/rudyll/narwal_r`, category **Integration**
-2. Search for "Narwal CN" and install
+2. Search for "Narwal" and install
 3. Restart Home Assistant
 
 #### Manual
 
-1. Copy `custom_components/narwal_cn/` into your HA `custom_components/` directory
+1. Copy `custom_components/narwal_r/` into your HA `custom_components/` directory
 2. Restart Home Assistant
 
 ### Configuration
